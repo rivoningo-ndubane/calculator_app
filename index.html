@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+
+<html>
+
+    <!-- HTML Head, this is where all meta data is written -->
+    <head>
+        <meta charset='utf-8'>
+        <link href='style.css' rel='stylesheet' type='text/css'>
+        <title></title>
+    </head>
+
+    <!-- Body tag, this is where the contents of your page should go -->
+    <body>
+        <table border="1">
+
+            <tr class="historyBox">
+                <td colspan="4">
+                    <p id="history"></p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <input type="text" id="inputBox" value="0"/>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="digitButton" onclick="digitBtnPressed(7)">7</td>
+                <td class="digitButton" onclick="digitBtnPressed(8)">8</td>
+                <td class="digitButton" onclick="digitBtnPressed(9)">9</td>
+                <td class="operatorButton" onclick="operatorBtnPressed('x')">x</td>
+            </tr>
+
+            <tr>
+                <td class="digitButton" onclick="digitBtnPressed(4)">4</td>
+                <td class="digitButton" onclick="digitBtnPressed(5)">5</td>
+                <td class="digitButton" onclick="digitBtnPressed(6)">6</td>
+                <td class="operatorButton" onclick="operatorBtnPressed('-')">-</td>
+            </tr>
+
+            <tr>
+                <td class="digitButton" onclick="digitBtnPressed(1)">1</td>
+                <td class="digitButton" onclick="digitBtnPressed(2)">2</td>
+                <td class="digitButton" onclick="digitBtnPressed(3)">3</td>
+                <td class="operatorButton" onclick="operatorBtnPressed('+')">+</td>
+            </tr>
+
+            <tr>
+                <td class="digitButton" colspan="2" onclick="digitBtnPressed(0)">0</td>
+                <td class="ACButton" onclick="btnACPressed()">AC</td>
+                <td class="operatorButton" onclick="operatorBtnPressed('&divide')">&divide;</td>
+            </tr>
+
+            <tr>
+                <td class="operatorButton" colspan="4" onclick="equalsBtnPressed()">=</td>
+            </tr>
+        </table>
+
+        <script>
+            // Initialize variables
+            var historyBox = document.getElementById("history")
+            var inputBox = document.getElementById("inputBox");
+            var newline = true;
+            var valueOne;
+            var currentOperator;
+
+            // Event handler for when digit button is pressed
+            function digitBtnPressed(button){
+                switch(button){
+                    case 0:
+                        if (newline){
+                            inputBox.value = 0;
+                            break;
+                        }
+
+                    default:
+                        if(newline){
+                            inputBox.value = button;
+                            newline = false;
+                        } else{
+                            var current_value = inputBox.value;
+                            inputBox.value = current_value + button;
+                        }
+                        break;
+                }
+            }
+
+            // Event handler for when the AC button is pressed
+            function btnACPressed(){
+                inputBox.value = 0;
+                valueOne = 0;
+                historyBox.innerHTML = ""
+                newline = true;
+            }
+
+            // Event handler for when an operator is pressed
+            function operatorBtnPressed(operator){
+                currentOperator = operator;
+                valueOne = parseInt(inputBox.value);
+                historyBox.innerHTML = valueOne +" "+ currentOperator
+
+                newline = true
+            }
+
+            // Event handler for when the equals sign is pressed
+            function equalsBtnPressed(){
+                var valueTwo = parseInt(inputBox.value)
+                var finalTotal;
+
+                switch(currentOperator){
+                    case "+":
+                        finalTotal = valueOne + valueTwo;
+                        break;
+
+                    case "-":
+                        finalTotal = valueOne - valueTwo;
+                        break;
+
+                    case "x":
+                        finalTotal = valueOne * valueTwo;
+                        break;
+
+                    case "\u00F7": // this is the unicode for division in javascript
+                        finalTotal = valueOne / valueTwo;
+                        break;
+                }
+
+                // Change screen values
+                historyBox.innerHTML = (valueOne +" "+ currentOperator 
+                                        +" "+ valueTwo +" =")
+                inputBox.value = finalTotal
+
+                // Theres no need to reset variables
+            }
+
+        </script>
+
+    </body>
+
+</html>
